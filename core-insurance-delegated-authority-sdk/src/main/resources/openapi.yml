@@ -1,0 +1,860 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:18080
+  description: Generated server url
+tags:
+- name: Coverholder Appointments
+  description: Appointment of a distributor under a binder
+- name: Binders
+  description: Delegated-authority binder between a carrier and a coverholder
+- name: Authority Limits
+  description: "Limit inside a binder: sum insured, premium, territory, or line"
+paths:
+  /api/v1/binders/{binderId}:
+    get:
+      tags:
+      - Binders
+      summary: Get Binder by id
+      description: Retrieve one Binder
+      operationId: getBinderById
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Binder found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BinderDTO"
+        "404":
+          description: Binder not found
+    put:
+      tags:
+      - Binders
+      summary: Update Binder
+      description: Update an existing Binder
+      operationId: updateBinder
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BinderDTO"
+        required: true
+      responses:
+        "200":
+          description: Binder updated
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BinderDTO"
+        "400":
+          description: Invalid data
+        "404":
+          description: Binder not found
+    delete:
+      tags:
+      - Binders
+      summary: Delete Binder
+      description: Delete a Binder
+      operationId: deleteBinder
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Binder deleted
+        "404":
+          description: Binder not found
+  /api/v1/binders/{binderId}/limits/{authorityLimitId}:
+    get:
+      tags:
+      - Authority Limits
+      summary: Get AuthorityLimit by id
+      description: Retrieve one AuthorityLimit
+      operationId: getAuthorityLimitById
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: authorityLimitId
+        in: path
+        description: Unique identifier of the AuthorityLimit
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: AuthorityLimit found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorityLimitDTO"
+        "404":
+          description: AuthorityLimit not found
+    put:
+      tags:
+      - Authority Limits
+      summary: Update AuthorityLimit
+      description: Update an existing AuthorityLimit
+      operationId: updateAuthorityLimit
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: authorityLimitId
+        in: path
+        description: Unique identifier of the AuthorityLimit
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorityLimitDTO"
+        required: true
+      responses:
+        "200":
+          description: AuthorityLimit updated
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorityLimitDTO"
+        "400":
+          description: Invalid data
+        "404":
+          description: AuthorityLimit not found
+    delete:
+      tags:
+      - Authority Limits
+      summary: Delete AuthorityLimit
+      description: Delete a AuthorityLimit
+      operationId: deleteAuthorityLimit
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: authorityLimitId
+        in: path
+        description: Unique identifier of the AuthorityLimit
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: AuthorityLimit deleted
+        "404":
+          description: AuthorityLimit not found
+  /api/v1/binders/{binderId}/appointments/{coverholderAppointmentId}:
+    get:
+      tags:
+      - Coverholder Appointments
+      summary: Get CoverholderAppointment by id
+      description: Retrieve one CoverholderAppointment
+      operationId: getCoverholderAppointmentById
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: coverholderAppointmentId
+        in: path
+        description: Unique identifier of the CoverholderAppointment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: CoverholderAppointment found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        "404":
+          description: CoverholderAppointment not found
+    put:
+      tags:
+      - Coverholder Appointments
+      summary: Update CoverholderAppointment
+      description: Update an existing CoverholderAppointment
+      operationId: updateCoverholderAppointment
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: coverholderAppointmentId
+        in: path
+        description: Unique identifier of the CoverholderAppointment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        required: true
+      responses:
+        "200":
+          description: CoverholderAppointment updated
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        "400":
+          description: Invalid data
+        "404":
+          description: CoverholderAppointment not found
+    delete:
+      tags:
+      - Coverholder Appointments
+      summary: Delete CoverholderAppointment
+      description: Delete a CoverholderAppointment
+      operationId: deleteCoverholderAppointment
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: coverholderAppointmentId
+        in: path
+        description: Unique identifier of the CoverholderAppointment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: CoverholderAppointment deleted
+        "404":
+          description: CoverholderAppointment not found
+  /api/v1/binders:
+    post:
+      tags:
+      - Binders
+      summary: Create Binder
+      description: Create a Binder
+      operationId: createBinder
+      parameters:
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BinderDTO"
+        required: true
+      responses:
+        "201":
+          description: Binder created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BinderDTO"
+        "400":
+          description: Invalid data
+  /api/v1/binders/{binderId}/limits:
+    post:
+      tags:
+      - Authority Limits
+      summary: Create AuthorityLimit
+      description: Create a AuthorityLimit
+      operationId: createAuthorityLimit
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorityLimitDTO"
+        required: true
+      responses:
+        "201":
+          description: AuthorityLimit created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorityLimitDTO"
+        "400":
+          description: Invalid data
+  /api/v1/binders/{binderId}/limits/filter:
+    post:
+      tags:
+      - Authority Limits
+      summary: Filter authorityLimits
+      description: Retrieve a page of authorityLimits matching the filter
+      operationId: filterAuthorityLimits
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FilterRequestAuthorityLimitDTO"
+        required: true
+      responses:
+        "200":
+          description: Page of matching records
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PaginationResponseAuthorityLimitDTO"
+        "400":
+          description: Invalid filter request
+  /api/v1/binders/{binderId}/appointments:
+    post:
+      tags:
+      - Coverholder Appointments
+      summary: Create CoverholderAppointment
+      description: Create a CoverholderAppointment
+      operationId: createCoverholderAppointment
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        required: true
+      responses:
+        "201":
+          description: CoverholderAppointment created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        "400":
+          description: Invalid data
+  /api/v1/binders/{binderId}/appointments/filter:
+    post:
+      tags:
+      - Coverholder Appointments
+      summary: Filter coverholderAppointments
+      description: Retrieve a page of coverholderAppointments matching the filter
+      operationId: filterCoverholderAppointments
+      parameters:
+      - name: binderId
+        in: path
+        description: Unique identifier of the Binder
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FilterRequestCoverholderAppointmentDTO"
+        required: true
+      responses:
+        "200":
+          description: Page of matching records
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PaginationResponseCoverholderAppointmentDTO"
+        "400":
+          description: Invalid filter request
+  /api/v1/binders/filter:
+    post:
+      tags:
+      - Binders
+      summary: Filter binders
+      description: Retrieve a page of binders matching the filter
+      operationId: filterBinders
+      parameters:
+      - name: X-Idempotency-Key
+        in: header
+        description: "Unique key for idempotent requests. If provided, ensures that\
+          \ identical requests with the same key will only be processed once."
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FilterRequestBinderDTO"
+        required: true
+      responses:
+        "200":
+          description: Page of matching records
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PaginationResponseBinderDTO"
+        "400":
+          description: Invalid filter request
+components:
+  schemas:
+    BinderDTO:
+      required:
+      - binderNumber
+      - binderStatus
+      - carrierPartyId
+      - contractId
+      - coverholderDistributorId
+      - effectiveFrom
+      - lineOfBusiness
+      - tenantId
+      type: object
+      properties:
+        binderId:
+          type: string
+          format: uuid
+          readOnly: true
+        tenantId:
+          type: string
+          format: uuid
+        binderNumber:
+          maxLength: 64
+          minLength: 0
+          type: string
+        contractId:
+          type: string
+          format: uuid
+        carrierPartyId:
+          type: string
+          format: uuid
+        coverholderDistributorId:
+          type: string
+          format: uuid
+        lineOfBusiness:
+          type: string
+          enum:
+          - MOTOR
+          - PROPERTY
+          - LIABILITY
+          - LIFE
+          - HEALTH
+          - MARINE
+          - AVIATION
+          - ACCIDENT
+          - OTHER
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+        binderStatus:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - SUSPENDED
+          - EXPIRED
+        currency:
+          pattern: "[A-Z]{3}"
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AuthorityLimitDTO:
+      required:
+      - binderId
+      - limitType
+      type: object
+      properties:
+        authorityLimitId:
+          type: string
+          format: uuid
+          readOnly: true
+        binderId:
+          type: string
+          format: uuid
+        limitType:
+          type: string
+          enum:
+          - SUM_INSURED
+          - PREMIUM
+          - TERRITORY
+          - LINE
+        maximumAmount:
+          type: number
+        currency:
+          pattern: "[A-Z]{3}"
+          type: string
+        territory:
+          maxLength: 128
+          minLength: 0
+          type: string
+        lineOfBusiness:
+          type: string
+          enum:
+          - MOTOR
+          - PROPERTY
+          - LIABILITY
+          - LIFE
+          - HEALTH
+          - MARINE
+          - AVIATION
+          - ACCIDENT
+          - OTHER
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CoverholderAppointmentDTO:
+      required:
+      - appointedFrom
+      - binderId
+      - distributorId
+      type: object
+      properties:
+        coverholderAppointmentId:
+          type: string
+          format: uuid
+          readOnly: true
+        binderId:
+          type: string
+          format: uuid
+        distributorId:
+          type: string
+          format: uuid
+        partyId:
+          type: string
+          format: uuid
+        appointedFrom:
+          type: string
+          format: date
+        appointedTo:
+          type: string
+          format: date
+        active:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    FilterOptions:
+      type: object
+      properties:
+        caseInsensitiveStrings:
+          type: boolean
+        includeInheritedFields:
+          type: boolean
+      description: Filter options for customizing filter behavior
+    FilterRequestAuthorityLimitDTO:
+      required:
+      - pagination
+      type: object
+      properties:
+        filters:
+          $ref: "#/components/schemas/AuthorityLimitDTO"
+        rangeFilters:
+          $ref: "#/components/schemas/RangeFilter"
+        pagination:
+          $ref: "#/components/schemas/PaginationRequest"
+        options:
+          $ref: "#/components/schemas/FilterOptions"
+      description: Filter criteria
+    PaginationRequest:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          description: The zero-based page number to retrieve.
+          format: int32
+          example: 0
+          default: 0
+        pageSize:
+          type: integer
+          description: The number of items per page.
+          format: int32
+          example: 10
+          default: 10
+        sortBy:
+          type: string
+          description: The field to sort the results by.
+          example: name
+        sortDirection:
+          type: string
+          description: "The direction of sorting, either ASC or DESC."
+          example: DESC
+          default: DESC
+      description: "Represents a pagination request for retrieving paginated results,\
+        \ including page number, size, sort field, and direction."
+    RangeFilter:
+      type: object
+      properties:
+        ranges:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/RangeObject"
+          description: Map of field names to their range criteria
+      description: Represents range filters for numeric fields
+    RangeObject:
+      type: object
+      properties:
+        from:
+          type: object
+          description: Start value of the range
+        to:
+          type: object
+          description: End value of the range
+      description: Represents a range with from and to values
+    PaginationResponseAuthorityLimitDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          description: The list of items for the current page.
+          items:
+            $ref: "#/components/schemas/AuthorityLimitDTO"
+        totalElements:
+          type: integer
+          description: The total number of elements across all pages.
+          format: int64
+        totalPages:
+          type: integer
+          description: The total number of pages based on the data size and page size.
+          format: int32
+        currentPage:
+          type: integer
+          description: "The current page number, typically zero-based."
+          format: int32
+      description: Represents a paginated response containing a list of items and
+        pagination metadata.
+    FilterRequestCoverholderAppointmentDTO:
+      required:
+      - pagination
+      type: object
+      properties:
+        filters:
+          $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        rangeFilters:
+          $ref: "#/components/schemas/RangeFilter"
+        pagination:
+          $ref: "#/components/schemas/PaginationRequest"
+        options:
+          $ref: "#/components/schemas/FilterOptions"
+      description: Filter criteria
+    PaginationResponseCoverholderAppointmentDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          description: The list of items for the current page.
+          items:
+            $ref: "#/components/schemas/CoverholderAppointmentDTO"
+        totalElements:
+          type: integer
+          description: The total number of elements across all pages.
+          format: int64
+        totalPages:
+          type: integer
+          description: The total number of pages based on the data size and page size.
+          format: int32
+        currentPage:
+          type: integer
+          description: "The current page number, typically zero-based."
+          format: int32
+      description: Represents a paginated response containing a list of items and
+        pagination metadata.
+    FilterRequestBinderDTO:
+      required:
+      - pagination
+      type: object
+      properties:
+        filters:
+          $ref: "#/components/schemas/BinderDTO"
+        rangeFilters:
+          $ref: "#/components/schemas/RangeFilter"
+        pagination:
+          $ref: "#/components/schemas/PaginationRequest"
+        options:
+          $ref: "#/components/schemas/FilterOptions"
+      description: Filter criteria
+    PaginationResponseBinderDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          description: The list of items for the current page.
+          items:
+            $ref: "#/components/schemas/BinderDTO"
+        totalElements:
+          type: integer
+          description: The total number of elements across all pages.
+          format: int64
+        totalPages:
+          type: integer
+          description: The total number of pages based on the data size and page size.
+          format: int32
+        currentPage:
+          type: integer
+          description: "The current page number, typically zero-based."
+          format: int32
+      description: Represents a paginated response containing a list of items and
+        pagination metadata.
