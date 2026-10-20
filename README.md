@@ -127,7 +127,7 @@ mvn clean verify
 mvn -pl core-insurance-delegated-authority-web spring-boot:run
 ```
 
-Java 25 and Maven 3.9 or newer. The parent POM is `com.firefly:firefly-parent:1.2.0-SNAPSHOT`.
+Java 25 and Maven 3.9 or newer. The parent POM is `com.firefly:firefly-parent:26.10.20`.
 
 ## Stack
 
