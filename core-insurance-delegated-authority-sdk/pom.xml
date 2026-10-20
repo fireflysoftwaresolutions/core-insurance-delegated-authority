@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>core-insurance-delegated-authority-sdk</artifactId>
+    <name>core-insurance-delegated-authority-sdk</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

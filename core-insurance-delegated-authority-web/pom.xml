@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>core-insurance-delegated-authority-web</artifactId>
+    <name>core-insurance-delegated-authority-web</name>
 
     <properties>
         <openapi.gen.skip>false</openapi.gen.skip>

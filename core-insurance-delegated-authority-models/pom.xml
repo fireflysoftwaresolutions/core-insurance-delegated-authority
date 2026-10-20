@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>core-insurance-delegated-authority-models</artifactId>
+    <name>core-insurance-delegated-authority-models</name>
 
     <dependencies>
         <dependency>

@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>core-insurance-delegated-authority-interfaces</artifactId>
+    <name>core-insurance-delegated-authority-interfaces</name>
 
     <dependencies>
         <dependency>
