@@ -1,9 +1,9 @@
 <a href="https://fireflysoftware.io/openplatform/">
 <picture>
-  <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/firefly-oss/.github/main/profile/assets/banner-narrow-dark.svg">
-  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/firefly-oss/.github/main/profile/assets/banner-narrow-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/firefly-oss/.github/main/profile/assets/banner-dark.svg">
-  <img src="https://raw.githubusercontent.com/firefly-oss/.github/main/profile/assets/banner-light.svg" alt="Firefly OpenPlatform - Core Insurance - Delegated Authority" width="100%">
+  <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fireflysoftwaresolutions/.github/main/profile/assets/banner-narrow-dark.svg">
+  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/fireflysoftwaresolutions/.github/main/profile/assets/banner-narrow-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fireflysoftwaresolutions/.github/main/profile/assets/banner-dark.svg">
+  <img src="https://raw.githubusercontent.com/fireflysoftwaresolutions/.github/main/profile/assets/banner-light.svg" alt="Firefly OpenPlatform - Core Insurance - Delegated Authority" width="100%">
 </picture>
 </a>
 
@@ -19,7 +19,9 @@ Repository: [https://github.com/firefly-oss/core-insurance-delegated-authority](
 
 Stores the authority an insurer delegates to a coverholder. The binder agreement itself remains a contract. Bordereaux remain in core-insurance-financials. This service does not decide whether a risk is inside authority.
 
-This is a **core** service. It owns its tables and exposes a reactive CRUD API. It does not call other core services. Domain orchestration is intentionally not in this repository.
+This is a **core** service. It owns its tables and exposes a reactive API. It does not call other core services. Domain orchestration is intentionally not in this repository.
+
+A binder follows an explicit status lifecycle. `DRAFT` may become `ACTIVE`. `ACTIVE` may become `SUSPENDED` or `EXPIRED`. `SUSPENDED` may return to `ACTIVE` or become `EXPIRED`. `EXPIRED` stays on file. Only a `DRAFT` binder can be removed. An active binder stays on file.
 
 ## What it does not own
 
@@ -89,7 +91,7 @@ Fields that point at another Firefly service are logical references. Foreign key
 | POST | `/api/v1/binders` | Create a Binder |
 | GET | `/api/v1/binders/{binderId}` | Get a Binder |
 | PUT | `/api/v1/binders/{binderId}` | Update a Binder |
-| DELETE | `/api/v1/binders/{binderId}` | Delete a Binder |
+| DELETE | `/api/v1/binders/{binderId}` | Delete a draft binder. An active binder stays on file |
 | POST | `/api/v1/binders/{binderId}/limits/filter` | Filter authoritylimits |
 | POST | `/api/v1/binders/{binderId}/limits` | Create a AuthorityLimit |
 | GET | `/api/v1/binders/{binderId}/limits/{authorityLimitId}` | Get a AuthorityLimit |
