@@ -24,6 +24,7 @@ import org.fireflyframework.web.error.exceptions.ResourceNotFoundException;
 import io.fireflysoftware.core.insurance.authority.core.mappers.BinderMapper;
 import io.fireflysoftware.core.insurance.authority.core.services.BinderService;
 import io.fireflysoftware.core.insurance.authority.interfaces.dtos.BinderDTO;
+import io.fireflysoftware.core.insurance.authority.interfaces.enums.BinderStatus;
 import io.fireflysoftware.core.insurance.authority.models.entities.Binder;
 import io.fireflysoftware.core.insurance.authority.models.repositories.BinderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,11 @@ public class BinderServiceImpl implements BinderService {
     public Mono<BinderDTO> createBinder(BinderDTO dto) {
         return Mono.just(dto)
                 .map(mapper::toEntity)
+                .doOnNext(entity -> {
+                    if (entity.getBinderStatus() == null) {
+                        entity.setBinderStatus(BinderStatus.DRAFT);
+                    }
+                })
                 .flatMap(repository::save)
                 .map(mapper::toDTO);
     }
@@ -61,8 +67,19 @@ public class BinderServiceImpl implements BinderService {
         return repository.findById(binderId)
                 .switchIfEmpty(Mono.error(ResourceNotFoundException.forResource("Binder", binderId.toString())))
                 .flatMap(existing -> {
+                    BinderStatus current = existing.getBinderStatus() != null
+                            ? existing.getBinderStatus()
+                            : BinderStatus.DRAFT;
                     mapper.updateEntityFromDto(dto, existing);
                     existing.setBinderId(binderId);
+                    BinderStatus next = existing.getBinderStatus() != null
+                            ? existing.getBinderStatus()
+                            : current;
+                    if (!BinderLifecycle.canTransition(current, next)) {
+                        return Mono.error(new IllegalStateException(
+                                "Binder " + binderId + " cannot move from " + current + " to " + next));
+                    }
+                    existing.setBinderStatus(next);
                     return repository.save(existing);
                 })
                 .map(mapper::toDTO);
@@ -72,7 +89,17 @@ public class BinderServiceImpl implements BinderService {
     public Mono<Void> deleteBinder(UUID binderId) {
         return repository.findById(binderId)
                 .switchIfEmpty(Mono.error(ResourceNotFoundException.forResource("Binder", binderId.toString())))
-                .flatMap(existing -> repository.deleteById(binderId));
+                .flatMap(existing -> {
+                    BinderStatus status = existing.getBinderStatus() != null
+                            ? existing.getBinderStatus()
+                            : BinderStatus.DRAFT;
+                    if (status != BinderStatus.DRAFT) {
+                        return Mono.error(new IllegalStateException(
+                                "Binder " + binderId + " is " + status
+                                        + " and cannot be deleted; expire it so the binder history is kept"));
+                    }
+                    return repository.deleteById(binderId);
+                });
     }
 
     @Override
